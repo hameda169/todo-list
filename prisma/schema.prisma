@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// TODO: this is a test model and should be removed while adding next-auth
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
