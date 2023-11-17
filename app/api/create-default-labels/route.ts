@@ -11,14 +11,15 @@ export async function GET() {
     { id: 'clp1kczqd0005u8uhxp2s1yld', text: 'Label5', color: '#25b651' },
   ];
 
-  const currentLabels = await prismaClient.label.findMany();
+  // TODO: we don't have `createMany` function with sqlite database so this workaround is for doing that
+  await labels.reduce(async (current, label) => {
+    await current;
+    await prismaClient.label.upsert({
+      where: { id: label.id },
+      update: {},
+      create: label,
+    });
+  }, Promise.resolve());
 
-  await Promise.all(
-    labels
-      .filter(({ id }) => currentLabels.find((item) => item.id === id) === undefined)
-      .map(async (label) => {
-        await prismaClient.label.create({ data: { id: label.id, text: label.text, color: label.color } });
-      }),
-  );
   return NextResponse.json({ response: `labels are created` }, { status: 200 });
 }
