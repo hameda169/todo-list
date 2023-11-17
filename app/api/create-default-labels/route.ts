@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prismaClient } from '@/app/api/utils';
 
 // TODO: this endpoint is for creating the default labels at first
 export async function GET() {
@@ -13,16 +11,14 @@ export async function GET() {
     { id: 'clp1kczqd0005u8uhxp2s1yld', text: 'Label5', color: '#25b651' },
   ];
 
-  const currentLabels = await prisma.label.findMany();
+  const currentLabels = await prismaClient.label.findMany();
 
-  await labels
-    .filter(({ id }) => currentLabels.find((item) => item.id === id) === undefined)
-    .reduce(
-      async (current, label) => {
-        await current;
-        await prisma.label.create({ data: { id: label.id, text: label.text, color: label.color } });
-      },
-      new Promise<void>((resolve) => resolve()),
-    );
+  await Promise.all(
+    labels
+      .filter(({ id }) => currentLabels.find((item) => item.id === id) === undefined)
+      .map(async (label) => {
+        await prismaClient.label.create({ data: { id: label.id, text: label.text, color: label.color } });
+      }),
+  );
   return NextResponse.json({ response: `labels are created` }, { status: 200 });
 }

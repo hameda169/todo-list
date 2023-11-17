@@ -1,9 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prismaClient } from '@/app/api/utils';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -13,7 +11,7 @@ const authOptions: NextAuthOptions = {
       httpOptions: { timeout: 20000 },
     }),
   ],
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prismaClient),
   secret: process.env.NEXT_AUTH_SECRET,
   callbacks: {
     async session({ session, user }) {
