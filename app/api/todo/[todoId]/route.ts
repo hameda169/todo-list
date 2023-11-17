@@ -83,6 +83,7 @@ export async function PUT(request: NextRequest, { params }: { params: { todoId: 
     where: { id: todo.id },
     data: {
       name: data.name,
+      dueDate: data.dueDate,
       ...(data.labels
         ? {
             labels: {

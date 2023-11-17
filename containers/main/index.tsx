@@ -5,24 +5,26 @@ import { useCallback, useEffect, useState } from 'react';
 import ToDoList from './components/todo-list';
 import { AsyncRequest, ToDoType } from '@/types';
 import AddToDo from '@/containers/main/components/add-todo';
+import { LabelProvider } from './contexts/label';
 
 export default function MainPage({ session }: { session: Session }) {
-  const userName = session.user.name!;
+  const userName = session.user.name;
   const userId = session.user.id;
   const [toDosRequest, setToDosRequest] = useState<AsyncRequest<Array<ToDoType>>>({ status: 'initial' });
 
-  useEffect(() => {
-    async function callback() {
-      try {
-        setToDosRequest({ status: 'loading', data: undefined, error: undefined });
-        const toDos: Array<ToDoType> = await (await fetch('/api/todo')).json();
-        setToDosRequest({ status: 'success', data: toDos, error: undefined });
-      } catch (error) {
-        setToDosRequest({ status: 'error', data: undefined, error: error as Error });
-      }
+  const loadToDos = useCallback(async () => {
+    try {
+      setToDosRequest({ status: 'loading', data: undefined, error: undefined });
+      const toDos: Array<ToDoType> = await (await fetch('/api/todo')).json();
+      setToDosRequest({ status: 'success', data: toDos, error: undefined });
+    } catch (error) {
+      setToDosRequest({ status: 'error', data: undefined, error: error as Error });
     }
-    void callback();
   }, []);
+
+  useEffect(() => {
+    void loadToDos();
+  }, [loadToDos]);
 
   const addNewToDo = useCallback((createdToDo: ToDoType) => {
     setToDosRequest((prev) =>
@@ -47,19 +49,30 @@ export default function MainPage({ session }: { session: Session }) {
   }, []);
 
   return (
-    <div>
-      Hello {`${userName || `NoName (${userId})`}`}.
+    <LabelProvider>
       <div>
-        <button onClick={() => signOut()}>Click here to sign out</button>
+        Hello {userName || `NoName (${userId})`}.
+        <div>
+          <button onClick={() => signOut()}>Click here to sign out</button>
+        </div>
+        <div>
+          {toDosRequest.status === 'loading' ? 'Loading todo items ...' : null}
+          {toDosRequest.status === 'success' ? (
+            <>
+              <ToDoList toDos={toDosRequest.data} onDelete={deleteToDo} onEdit={editToDo} />
+              <AddToDo onDone={addNewToDo} />
+            </>
+          ) : null}
+          {toDosRequest.status === 'error' ? (
+            <div>
+              Error while loading ToDos: {toDosRequest.error.message}
+              <div>
+                <button onClick={loadToDos}>Try again</button>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
-      <div>
-        {toDosRequest.status === 'loading' ? 'Loading todo items ...' : null}
-        {toDosRequest.status === 'success' ? (
-          <ToDoList toDos={toDosRequest.data} onDelete={deleteToDo} onEdit={editToDo} />
-        ) : null}
-        {toDosRequest.status === 'error' ? `Error: ${toDosRequest.error.message}` : null}
-      </div>
-      <AddToDo onDone={addNewToDo} />
-    </div>
+    </LabelProvider>
   );
 }
