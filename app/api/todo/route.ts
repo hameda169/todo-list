@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
       name: data.name,
       createdAt: now,
       updatedAt: now,
+      dueDate: data.dueDate,
       ...(data.labels ? { labels: { create: data.labels.map((labelId: string) => ({ labelId })) } } : {}),
     },
   });
