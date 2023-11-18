@@ -19,7 +19,8 @@
     "pino-logflare": "^0.4.2",
     "react": "^18",
     "react-dom": "^18",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20",

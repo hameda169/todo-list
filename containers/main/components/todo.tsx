@@ -2,6 +2,7 @@ import { AsyncRequest, ToDoType } from '@/types';
 import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useLabels } from '@/containers/main/contexts/label';
 import dayjs from 'dayjs';
+import { toDoUpdateSchema } from '@/validations';
 
 export default function ToDo({
   toDo,
@@ -34,7 +35,7 @@ export default function ToDo({
         const editedToDo: ToDoType = await (
           await fetch(`/api/todo/${toDo.id}`, {
             method: 'PUT',
-            body: JSON.stringify(newData),
+            body: JSON.stringify(toDoUpdateSchema.parse(newData)),
           })
         ).json();
         setEditToDoRequest({ status: 'success', data: undefined, error: undefined });
