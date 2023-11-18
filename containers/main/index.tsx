@@ -6,11 +6,9 @@ import { AsyncRequest, EditingToDoType, FilterType, ToDoType } from '@/types';
 import { LabelProvider } from './contexts/label';
 import ToDoForm from './components/todo-form';
 import { toDoCreateSchema } from '@/validations';
-import Header from '@/pages/main/components/header';
-import Filters from '@/pages/main/components/filters';
-import GitHubCalendar from 'react-github-contribution-calendar';
-import dayjs from 'dayjs';
-import Statistics from '@/pages/main/components/statistics';
+import Header from './components/header';
+import Filters from './components/filters';
+import Statistics from './components/statistics';
 
 export default function MainPage({ session }: { session: Session }) {
   const [toDosRequest, setToDosRequest] = useState<AsyncRequest<Array<ToDoType>>>({ status: 'initial' });

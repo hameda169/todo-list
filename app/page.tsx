@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import SignInPage from '@/pages/sign-in';
-import MainPage from '@/pages/main';
+import { authOptions } from './api/auth/[...nextauth]/options';
+import SignInPage from '@/containers/sign-in';
+import MainPage from '@/containers/main';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);

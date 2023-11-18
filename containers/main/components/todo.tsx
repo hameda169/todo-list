@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { toDoUpdateSchema } from '@/validations';
 import EditIcon from '@/components/icons/edit';
 import DeleteIcon from '@/components/icons/delete';
-import ToDoForm from '@/pages/main/components/todo-form';
+import ToDoForm from '../components/todo-form';
 
 function getDaysPluralType(count: number) {
   if (count > 1) return 'days';
@@ -47,7 +47,6 @@ function ToDoComponent({
   onDelete: (deletedToDo: ToDoType) => void;
   onEdit: (editedToDo: ToDoType) => void;
 }) {
-  console.log('todo render');
   const [isEditingToDo, setIsEditingToDo] = useState(false);
   const [deleteToDosRequest, setDeleteToDosRequest] = useState<AsyncRequest>({ status: 'initial' });
   const [editToDoRequest, setEditToDoRequest] = useState<AsyncRequest>({ status: 'initial' });

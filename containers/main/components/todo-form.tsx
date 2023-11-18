@@ -1,4 +1,4 @@
-import { useLabels } from '@/pages/main/contexts/label';
+import { useLabels } from '../contexts/label';
 import { AsyncRequest, EditingToDoType, ToDoType } from '@/types';
 import { FormEvent, memo, useCallback, useState } from 'react';
 import dayjs from 'dayjs';
@@ -14,7 +14,6 @@ function ToDoFormComponent({
   onCancel: () => void;
   request: AsyncRequest;
 }) {
-  console.log('todo form render');
   const labels = useLabels();
 
   const [todo, setToDo] = useState<Omit<Partial<ToDoType>, 'labels'> & { labels: Record<string, boolean> }>(
