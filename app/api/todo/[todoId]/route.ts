@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '../../auth/[...nextauth]/options';
 import logger from '@/logger';
 import { parseZodError, prismaClient } from '@/app/api/utils';
 import { normalizeToDo, toDoQueryInclude } from '@/app/api/todo/utils';

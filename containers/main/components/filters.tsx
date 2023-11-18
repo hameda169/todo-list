@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useLabels } from '@/pages/main/contexts/label';
+import { useLabels } from '../contexts/label';
 import { FilterType } from '@/types';
 
 function FiltersComponent({ value, onChange }: { value: FilterType; onChange: (newValue: FilterType) => void }) {

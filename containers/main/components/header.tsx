@@ -1,9 +1,9 @@
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import { memo, useState } from 'react';
+import Image from 'next/image';
 
 function HeaderComponent({ session }: { session: Session }) {
-  console.log('header render');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const userName = session.user.name;
@@ -13,7 +13,9 @@ function HeaderComponent({ session }: { session: Session }) {
     <div className='flex w-screen flex-row items-center justify-between bg-orange-400 px-1 py-3'>
       <div>Pragmateam</div>
       <button onClick={() => setIsPopupOpen((prev) => !prev)}>
-        <img className='h-12 w-12 rounded-full' src={session.user.image || undefined} />
+        {session.user.image ? (
+          <Image width={48} height={48} alt='profile' className='h-12 w-12 rounded-full' src={session.user.image} />
+        ) : null}
       </button>
       {isPopupOpen ? (
         <div className='absolute right-8 top-10 flex flex-col rounded-2xl bg-blue-200 p-2 text-gray-900'>
